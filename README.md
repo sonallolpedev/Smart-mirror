@@ -19,10 +19,31 @@ Open: `http://127.0.0.1:8000`
 ## New web features
 
 - Time is served in Asia/Kolkata by default.
-- News is cached and refreshed hourly.
+- Indian technology news is cached and refreshed daily.
 - Camera-based motion detection is shown in the dashboard.
 - Browser-based emotion detection is shown in the dashboard.
 - Daily schedule can be customized and saved from the UI.
+
+## Deploy on Vercel
+
+This repo includes Vercel config in [vercel.json](vercel.json) and a serverless entrypoint at [api/index.py](api/index.py).
+
+### Deploy from CLI
+
+```bash
+npx vercel
+npx vercel --prod
+```
+
+### Vercel environment variables
+
+Set these in Vercel Project Settings -> Environment Variables:
+
+- MIRROR_TIMEZONE=Asia/Kolkata
+- NEWS_API_KEY=83380b7809424dda92b69d3c3be6c014
+- NEWS_COUNTRY=in
+- OPENWEATHER_API_KEY=9f378b08dc0f4c5abc165816261603
+- MIRROR_CITY=Pune,IN
 
 ## Optional environment settings
 

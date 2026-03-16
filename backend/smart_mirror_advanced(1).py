@@ -48,20 +48,20 @@ log = logging.getLogger("SmartMirror")
 # ─────────────────────────────────────────────
 CONFIG = {
     # API Keys
-    "WEATHER_API_KEY": "YOUR_OPENWEATHERMAP_API_KEY",
-    "NEWS_API_KEY":    "YOUR_NEWSAPI_KEY",
+    "WEATHER_API_KEY": "2eeed0c43d018ff0a2fbe87667da75aa",
+    "NEWS_API_KEY":    "e7e51ddb57174060a6fc3d6ab2da04dc",
     "OPENAI_API_KEY":  "YOUR_OPENAI_API_KEY",   # for GPT voice assistant
 
     # Location / Units
-    "CITY":         "London,GB",
+    "CITY":         "Pune,IN",
     "UNITS":        "metric",
-    "NEWS_COUNTRY": "gb",
+    "NEWS_COUNTRY": "in",
 
     # Refresh intervals (seconds)
     "WEATHER_REFRESH": 600,
     "NEWS_REFRESH":    300,
     "CLOCK_REFRESH":   1,
-    "EMOTION_REFRESH": 0.5,
+    "EMOTION_REFRESH": 1.5,   # DeepFace needs time — don't go below 1.0
     "FACE_REFRESH":    1.0,
 
     # Display
@@ -276,31 +276,49 @@ class EmotionDetector:
         self.running = False
 
     def _loop(self):
-        while self.running:
-            ret, frame = self._cap.read()
-            if not ret:
-                time.sleep(0.2)
-                continue
+        # Pre-load the emotion model once to avoid delay on first frame
+        if self._available:
+            try:
+                self._DeepFace.build_model("Emotion")
+                log.info("DeepFace Emotion model loaded.")
+            except Exception as e:
+                log.warning(f"Could not pre-load emotion model: {e}")
 
-            if self._available:
-                try:
-                    result = self._DeepFace.analyze(
-                        frame,
-                        actions=["emotion"],
-                        enforce_detection=False,
-                        silent=True
-                    )
-                    if isinstance(result, list):
-                        result = result[0]
-                    emotion = result["dominant_emotion"].lower()
-                    self.current_emotion = emotion.capitalize()
-                    self.emoji = self.EMOJI.get(emotion, "😐")
-                except Exception:
+        while self.running:
+            try:
+                ret, frame = self._cap.read()
+                if not ret or frame is None:
+                    time.sleep(0.2)
+                    continue
+
+                # Work on a copy so other threads aren't affected
+                frame = frame.copy()
+
+                if self._available:
+                    try:
+                        result = self._DeepFace.analyze(
+                            frame,
+                            actions=["emotion"],
+                            enforce_detection=False,
+                            detector_backend="opencv",
+                            silent=True
+                        )
+                        if isinstance(result, list):
+                            result = result[0]
+                        emotion = result["dominant_emotion"].lower()
+                        self.current_emotion = emotion.capitalize()
+                        self.emoji = self.EMOJI.get(emotion, "😐")
+                        log.debug(f"Emotion: {self.current_emotion}")
+                    except Exception as e:
+                        log.warning(f"Emotion analysis error: {e}")
+                        self.current_emotion = "Neutral"
+                        self.emoji = "😐"
+                else:
                     self.current_emotion = "Neutral"
                     self.emoji = "😐"
-            else:
-                self.current_emotion = "Neutral"
-                self.emoji = "😐"
+
+            except Exception as e:
+                log.warning(f"Emotion loop error: {e}")
 
             time.sleep(CONFIG["EMOTION_REFRESH"])
 

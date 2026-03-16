@@ -371,8 +371,7 @@ class VoiceAssistant:
         if CONFIG["OPENAI_API_KEY"] and CONFIG["OPENAI_API_KEY"] != "YOUR_OPENAI_API_KEY":
             try:
                 import openai
-                self._openai = openai
-                openai.api_key = CONFIG["OPENAI_API_KEY"]
+                self._client = openai.OpenAI(api_key=CONFIG["OPENAI_API_KEY"])
                 self._gpt_ok = True
                 log.info("OpenAI GPT ready.")
             except ImportError:
@@ -456,7 +455,7 @@ Keep responses under 40 words. Be warm and helpful."""
                 if len(self._history) > 10:
                     self._history = self._history[-10:]
 
-                resp = self._openai.ChatCompletion.create(
+                resp = self._client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[{"role": "system", "content": system_prompt}] + self._history,
                     max_tokens=80,
@@ -868,13 +867,13 @@ class SmartMirror:
         ]
         for week in calendar.monthcalendar(today.year, today.month):
             row = ""
-            for i, d in enumerate(week):
+            for d in week:
                 if d == 0:
                     row += "   "
                 elif d == today.day:
                     row += f"[{d:2}]"
                 else:
-                    row += f" {d:2} " if i < 6 else f" {d:2}"
+                    row += f" {d:2}"
             cal_lines.append(row)
 
         self.canvas.itemconfig(self.lbl_mini_cal, text="\n".join(cal_lines))

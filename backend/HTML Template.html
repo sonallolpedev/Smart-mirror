@@ -1,0 +1,70 @@
+# HTML Template WIDGET_TEMPLATE = '''
+<div class="grid-container" id="widgetGrid">
+    <div class="widget draggable" id="clock-widget">
+        <h2 id="time">22:35</h2>
+        <p id="date">Thursday, March 5</p>
+    </div>
+
+    <div class="widget draggable" id="weather-widget">
+        <div id="weather">26°C Clear Sky</div>
+    </div>
+
+    <div class="widget draggable" id="calendar-widget">
+        <h3>Today's Schedule</h3>
+        <ul id="events"></ul>
+    </div>
+
+    <div class="widget draggable" id="reflection-widget">
+        <p id="reflection"></p>
+    </div>
+</div>
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .widget {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 20px;
+        cursor: move;
+        transition: all 0.3s ease;
+    }
+    
+    .widget:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-5px);
+    }
+    
+    .dragging {
+        opacity: 0.5;
+        z-index: 1000;
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $('.draggable').draggable({
+        stop: function(event, ui) {
+            const widgetId = $(this).attr('id');
+            const position = ui.position;
+
+            // Save position to server
+            fetch('/api/save-layout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    widget_id: widgetId,
+                    position: position
+                })
+            });
+        }
+    });
+</script>

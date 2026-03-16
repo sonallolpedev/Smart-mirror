@@ -1,0 +1,10 @@
+opencv-python
+deepface
+face-recognition
+SpeechRecognition
+openai
+pyttsx3
+requests
+Pillow
+pyaudio
+numpy

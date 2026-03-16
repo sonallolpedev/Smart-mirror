@@ -17,15 +17,15 @@ pip install pvporcupine
 
 ## Setup
 
-1. Add your API keys in the CONFIG section of `smart_mirror_advanced.py`:
+1. Add your API keys in the CONFIG section of `smart_mirror.py`:
    - Weather API key from OpenWeatherMap
    - News API key from NewsAPI
    - OpenAI API key for GPT voice assistant
 
-2. Register faces: run `python smart_mirror_advanced.py --register "Your Name"`
+2. Register faces: run `python smart_mirror.py --register "Your Name"`
    - Stand in front of webcam, press SPACE to capture, ESC to finish.
 
-3. Run normally: `python smart_mirror_advanced.py`
+3. Run normally: `python smart_mirror.py`
 
 4. Say "Hey Mirror" (or press M) to activate voice assistant.
 

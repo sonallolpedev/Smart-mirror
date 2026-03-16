@@ -1,0 +1,37 @@
+{
+  "Monday": [
+    "07:00 Morning workout",
+    "10:30 Project standup",
+    "20:00 Family time"
+  ],
+  "Tuesday": [
+    "08:00 Plan weekly priorities",
+    "12:30 Lunch break",
+    "18:30 Read for 30 minutes"
+  ],
+  "Wednesday": [
+    "07:30 Stretch and mobility",
+    "11:00 Client follow-up",
+    "21:00 Next-day prep"
+  ],
+  "Thursday": [
+    "08:30 Deep work block",
+    "14:00 Team sync",
+    "19:00 Walk and unwind"
+  ],
+  "Friday": [
+    "09:00 Weekly review",
+    "15:30 Cleanup outstanding tasks",
+    "20:30 Movie night"
+  ],
+  "Saturday": [
+    "08:00 Personal errands",
+    "12:00 Lunch with friends",
+    "17:00 Hobby session"
+  ],
+  "Sunday": [
+    "09:00 Slow morning",
+    "16:00 Plan upcoming week",
+    "20:00 Early rest"
+  ]
+}

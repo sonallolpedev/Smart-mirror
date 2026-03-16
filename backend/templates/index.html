@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Mirror</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+  </head>
+  <body>
+    <video id="cameraFeed" class="camera-feed" autoplay playsinline muted></video>
+    <div class="camera-overlay"></div>
+    <div id="cameraStatus" class="camera-status">Camera: Requesting access...</div>
+
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <main class="dashboard">
+      <div class="rail left-rail">
+        <section class="card hero">
+          <p class="label">Smart Mirror</p>
+          <h1 id="clock">--:--:--</h1>
+          <p id="date" class="date">Loading date...</p>
+          <p id="timezone" class="meta">Timezone: --</p>
+        </section>
+
+        <section class="card schedule">
+          <p class="label">Today's Schedule</p>
+          <p id="scheduleDay" class="meta">Loading...</p>
+          <ul id="scheduleList" class="info-list">
+            <li>Loading schedule...</li>
+          </ul>
+          <div class="schedule-editor">
+            <label for="scheduleDaySelect" class="meta">Customize day</label>
+            <select id="scheduleDaySelect"></select>
+            <textarea
+              id="scheduleEditor"
+              rows="5"
+              placeholder="One task per line, e.g. 07:00 Gym"
+            ></textarea>
+            <button id="saveScheduleBtn" type="button">Save Schedule</button>
+            <p id="scheduleSaveStatus" class="meta">Not saved yet</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="center-spacer" aria-hidden="true"></div>
+
+      <div class="rail right-rail">
+        <section class="card weather">
+          <p class="label">Weather</p>
+          <div class="weather-row">
+            <span id="temp" class="temp">--</span>
+            <span class="unit">C</span>
+          </div>
+          <p id="condition" class="condition">Loading...</p>
+          <p id="city" class="meta">--</p>
+        </section>
+
+        <section class="card news">
+          <p class="label">Indian Tech News</p>
+          <p id="newsSource" class="meta">Loading...</p>
+          <ul id="newsList" class="info-list">
+            <li>Loading news...</li>
+          </ul>
+        </section>
+
+        <section class="card status">
+          <p class="label">Service Health</p>
+          <p id="health" class="health">Checking...</p>
+          <p id="updated" class="meta">Updated: --</p>
+          <p id="motionState" class="motion-pill">Motion: Calibrating...</p>
+          <p id="emotionState" class="emotion-pill">Emotion: Detecting...</p>
+        </section>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>
